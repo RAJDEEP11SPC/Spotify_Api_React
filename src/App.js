@@ -4,14 +4,16 @@ import axios from 'axios'
 
 const App = () => {
 const CLIENT_ID = "fdae41c9aa6c481280a86d6a8d480974"
-const REDIRECT_URI = "http://localhost:3000"
+const REDIRECT_URI = "https://rajdeep11spc.github.io/Spotify_Api_React/"
+
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
 const RESPONSE_TYPE = "token"
+const PLAYLISTS_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
 
 const [token , setToken] = useState('')
 const [ searchkey , setSearchKey ] = useState('')
 const [ artists , setArtists] = useState('')
-
+const [data, setData] = useState({});
 
 useEffect( () => {
   const hash = window.location.hash
@@ -52,12 +54,27 @@ const searchArtists = async (e) => {
  
 const renderArtists = () => {
   return artists.map(artist => (
-      <div key={artist.id}>
+      <div key={artist.id} >
           {artist.images.length ? <img width={"100%"} src={artist.images[0].url} alt=""/> : <div>No Image</div>}
           {artist.name}
       </div>
   ))
 }
+
+const handleGetPlaylists = () => {
+  axios
+    .get(PLAYLISTS_ENDPOINT, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((response) => {
+      setData(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
 
 
@@ -71,7 +88,7 @@ const renderArtists = () => {
 
       {token ?
       
-        <form onSubmit={searchArtists}>
+        <form onSubmit={searchArtists} >
           <input type="text" onChange={e => setSearchKey(e.target.value)}/>
             
             <button type={"submit"}>Search</button>
@@ -85,8 +102,13 @@ const renderArtists = () => {
 
 
       {artists && renderArtists()}
-      
-    </div>
+
+      <>
+      <button onClick={handleGetPlaylists}>Get Playlists</button>
+      {data?.items ? data.items.map((item) => <p>{item.name}</p>) : null}
+    </>
+
+      </div>
   )
 }
 
