@@ -4,7 +4,7 @@ import axios from 'axios'
 
 const App = () => {
 const CLIENT_ID = "fdae41c9aa6c481280a86d6a8d480974"
-const REDIRECT_URI = "https://rajdeep11spc.github.io/Spotify_Api_React"
+const REDIRECT_URI = "https://rajdeep11spc.github.io/Spotify_Api_React/"
 
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
 const RESPONSE_TYPE = "token"
